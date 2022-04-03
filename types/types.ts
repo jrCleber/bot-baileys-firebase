@@ -49,13 +49,6 @@ export type TAddress = {
    number?: string;
 };
 
-export type TCustomer = {
-   pushName: string;
-   profilePictureUrl?: string;
-   waid: string;
-   address: TAddress;
-};
-
 export type TDataTemp = {
    codeStage?: string;
    subStage?: string | import('firebase-admin').firestore.FieldValue;
