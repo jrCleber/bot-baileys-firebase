@@ -1,0 +1,9 @@
+{
+    "botName": "BurgerBot",
+    "baseName": "burgerbot",
+    "companyName": "Rei do Lanche",
+    "shortName": "burgão-bot",
+    "open": 8,
+    "closed": 20,
+    "redirectNumber": ["5531971714339"]
+}
