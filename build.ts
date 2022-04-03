@@ -12,7 +12,7 @@ import { join } from 'path';
          name: package_json.name,
          version: package_json.version,
          main: package_json.main,
-         script: {
+         scripts: {
             start: package_json.scripts['start:prod'],
          },
          dependencies: package_json.dependencies,
