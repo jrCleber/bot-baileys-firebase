@@ -1,0 +1,57 @@
+{
+  "name": "bot-baileys-firebase",
+  "version": "1.0.0",
+  "description": "self service bot for whatsapp",
+  "main": "initializer.ts",
+  "repository": {
+    "url": "https://github.com/jrCleber/bot-baileys-firebase"
+  },
+  "author": {
+    "name": "jrCleber",
+    "url": "https://github.com/jrCleber"
+  },
+  "scripts": {
+    "build": "tsc && ts-node --files --transpile-only ./build.ts",
+    "dev": "clear && ts-node --files --transpile-only ./modules/initializer.bot.ts",
+    "start:app": "tsc && node ./dist/modules/initializer.bot.js",
+    "start:prod": "node ./modules/initializer.bot.js",
+    "test": "clear && ts-node --files --transpile-only ./tests/all.test.ts"
+  },
+  "license": "MIT",
+  "private": true,
+  "keywords": [
+    "whatsapp",
+    "js-whatsapp",
+    "whatsapp-api",
+    "whatsapp-web",
+    "whatsapp-chat",
+    "whatsapp-group",
+    "automation",
+    "multi-device",
+    "baileys",
+    "bot"
+  ],
+  "dependencies": {
+    "@adiwajshing/baileys": "^4.0.1",
+    "axios": "^0.26.0",
+    "boom": "^7.3.0",
+    "dayjs": "^1.10.8",
+    "firebase-admin": "^10.0.2",
+    "pino": "^7.8.0",
+    "qrcode-terminal": "^0.12.0",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@types/axios": "^0.14.0",
+    "@types/uuid": "^8.3.4",
+    "@typescript-eslint/eslint-plugin": "^5.13.0",
+    "@typescript-eslint/parser": "^5.13.0",
+    "eslint": "^8.10.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "prettier": "^2.5.1",
+    "ts-node": "^10.6.0",
+    "ts-node-dev": "^1.1.8",
+    "typescript": "^4.6.2"
+  }
+}

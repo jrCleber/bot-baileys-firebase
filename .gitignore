@@ -1,0 +1,19 @@
+# Node / JS
+node_modules
+yarn.lock
+
+# vscode
+.vscode
+
+# surce
+dist
+
+# Project related
+keys
+tests
+sessionsMD
+sessions
+yarn-error.log
+
+# deployments
+.vercel
