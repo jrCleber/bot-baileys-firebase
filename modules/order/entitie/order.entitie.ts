@@ -9,7 +9,7 @@ export class OrderEntitie {
    public metadata: Metadata;
    public status?: 'complete' | 'incomplete' | 'paused' | 'canceled' | 'producing';
 
-   public toLoad(props: Omit<OrderEntitie, 'orderId' | 'toLoad' | 'toMap'>) {
+   public toLoad(props: Omit<OrderEntitie, 'orderId' | 'toLoad' | 'toMap' | 'metadata'>) {
       Object.assign(this, props);
    }
 
@@ -17,7 +17,6 @@ export class OrderEntitie {
       const nonEmptyFields: OrderDTO = {
          customerId: '',
          productList: [],
-         metadata: {},
       };
       for (const [key, value] of Object.entries(this)) {
          if (value) {

@@ -16,6 +16,6 @@ export type Product = {
 export type OrderDTO = {
    customerId: string | any;
    productList: Product[] | any;
-   metadata: Metadata | any;
+   metadata?: Metadata;
    status?: 'complete' | 'incomplete' | 'paused' | 'canceled' | 'producing';
 };

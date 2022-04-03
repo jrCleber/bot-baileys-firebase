@@ -19,6 +19,8 @@ export class OrderCRUDService {
    public insertDocument(orderDTO: OrderDTO) {
       this._toLoad(orderDTO);
 
+      console.log('order: ', this.orderEntitie.toMap());
+
       this.orderController.insertDocWithId(this.orderEntitie.orderId, this.orderEntitie.toMap());
 
       return { orderId: this.orderEntitie.orderId };
