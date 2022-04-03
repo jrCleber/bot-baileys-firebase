@@ -15,28 +15,11 @@ export class AddressManagement {
    public createButtons: (actionsList: ActionButton[]) => proto.IHydratedTemplateButton[];
    public seeTyping: (sock: WASocket, msgKey: proto.IMessageKey) => Promise<void>;
    public displayOrder: (data: TDataTemp) => string;
+   public checkReceivedText: (received: proto.IWebMessageInfo) => string;
 
    private async _getCep(zipCode: string) {
       const instance = axios.create({ baseURL: 'https://viacep.com.br/' });
       return await instance.get(`ws/${zipCode}/json/`);
-   }
-
-   private _checkReceivedText(received: proto.IWebMessageInfo): string {
-      let receivedText: string;
-
-      if (received.message?.conversation) {
-         receivedText = received.message.conversation;
-      } else if (received.message?.extendedTextMessage) {
-         receivedText = received.message.extendedTextMessage.text;
-      } else if (received.message?.ephemeralMessage) {
-         if (received.message.ephemeralMessage.message?.conversation) {
-            receivedText = received.message.ephemeralMessage.message.conversation;
-         } else if (received.message.ephemeralMessage.message?.extendedTextMessage) {
-            receivedText = received.message.ephemeralMessage.message.extendedTextMessage.text;
-         }
-      }
-
-      return receivedText;
    }
 
    private _responseError(received: proto.IWebMessageInfo, sock: WASocket) {
@@ -70,7 +53,7 @@ export class AddressManagement {
 
       const jid = received.key.remoteJid;
 
-      const receivedText = this._checkReceivedText(received);
+      const receivedText = this.checkReceivedText(received);
 
       if (receivedText) {
          const regexp = new RegExp(/[\d]+/gm);
@@ -146,7 +129,7 @@ export class AddressManagement {
       const documentData = documentReferemces!.data();
 
       const address: TAddress = documentData[FieldName.tempAddress];
-      address.distryct = this._checkReceivedText(received);
+      address.distryct = this.checkReceivedText(received);
 
       this.brokerService.brokerController.updateManyFields(jid, {
          [FieldName.tempAddress]: address,
@@ -173,7 +156,7 @@ export class AddressManagement {
       const documentData = documentReferemces!.data();
 
       const address: TAddress = documentData[FieldName.tempAddress];
-      address.publicPlace = this._checkReceivedText(received);
+      address.publicPlace = this.checkReceivedText(received);
 
       this.brokerService.brokerController.updateManyFields(jid, {
          [FieldName.tempAddress]: address,
@@ -200,7 +183,7 @@ export class AddressManagement {
       const documentData = documentReferemces!.data() as TDataTemp;
 
       const address = documentData[FieldName.tempAddress] as TAddress;
-      address.number = this._checkReceivedText(received);
+      address.number = this.checkReceivedText(received);
 
       this.brokerService.brokerController.updateManyFields(jid, {
          [FieldName.tempAddress]: address,

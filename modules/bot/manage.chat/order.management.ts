@@ -14,31 +14,14 @@ export class OrderManagement {
    public displayOrder: (data: TDataTemp) => string;
    public createButtons: (actionsList: ActionButton[]) => proto.IHydratedTemplateButton[];
    public seeTyping: (sock: WASocket, msgKey: proto.IMessageKey) => void;
-
-   private _checkReceivedText(received: proto.IWebMessageInfo): string {
-      let receivedText: string;
-
-      if (received.message?.conversation) {
-         receivedText = received.message.conversation;
-      } else if (received.message?.extendedTextMessage) {
-         receivedText = received.message.extendedTextMessage.text;
-      } else if (received.message?.ephemeralMessage) {
-         if (received.message.ephemeralMessage.message?.conversation) {
-            receivedText = received.message.ephemeralMessage.message.conversation;
-         } else if (received.message.ephemeralMessage.message?.extendedTextMessage) {
-            receivedText = received.message.ephemeralMessage.message.extendedTextMessage.text;
-         }
-      }
-
-      return receivedText;
-   }
+   public checkReceivedText: (received: proto.IWebMessageInfo) => string;
 
    public readonly validateQuantity = async (received: proto.IWebMessageInfo, sock: WASocket) => {
       this.seeTyping(sock, received.key);
 
       const jid = received.key.remoteJid;
 
-      const receivedText = this._checkReceivedText(received);
+      const receivedText = this.checkReceivedText(received);
 
       if (receivedText) {
          if (Number.parseInt(receivedText) && Number.parseInt(receivedText) > 0) {

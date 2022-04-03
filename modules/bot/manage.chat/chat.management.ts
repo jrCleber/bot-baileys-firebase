@@ -8,7 +8,6 @@ import {
    TProduct,
    DefaultCommandsKeys,
    TAddress,
-   TCustomer,
 } from '../../../types/types';
 import { BrokerService } from '../../broker/broker.service';
 import { AddressManagement } from './address.management';
@@ -18,10 +17,11 @@ import { FieldName } from '../../../utils/enum';
 import { OrderCommands } from '../commands/commands';
 import { OrderDTO } from '../../order/dto/order.dto';
 import dayjs from 'dayjs';
+import { CustomerDTO } from '../../customer/dto/customer.dto';
 
 type TRedrect = {
    sock: WASocket;
-   customer: TCustomer;
+   customer: CustomerDTO;
    dataTemp: TDataTemp;
 };
 
@@ -40,6 +40,24 @@ export class ChatManagement {
    }
 
    private _command: OrderCommandsKeys | AddressCommandsKeys;
+
+   private _checkReceivedText(received: proto.IWebMessageInfo): string {
+      let receivedText: string;
+
+      if (received.message?.conversation) {
+         receivedText = received.message.conversation;
+      } else if (received.message?.extendedTextMessage) {
+         receivedText = received.message.extendedTextMessage.text;
+      } else if (received.message?.ephemeralMessage) {
+         if (received.message.ephemeralMessage.message?.conversation) {
+            receivedText = received.message.ephemeralMessage.message.conversation;
+         } else if (received.message.ephemeralMessage.message?.extendedTextMessage) {
+            receivedText = received.message.ephemeralMessage.message.extendedTextMessage.text;
+         }
+      }
+
+      return receivedText;
+   }
 
    private _createJid(jid: string) {
       if (jid.includes('@g.us') || jid.includes('@s.whatsapp.net')) {
@@ -65,12 +83,12 @@ export class ChatManagement {
       }
    }
 
-   private redirectOrder({ sock, customer, dataTemp }: TRedrect) {
+   private _redirectOrder({ sock, customer, dataTemp }: TRedrect) {
       const contact = customer.waid.split('@')[0];
       const redirectMessage = `*PEDIDO*\n
       *Data/Hora:* ${dayjs(dataTemp.createAt as number).format('DD-MM-YYYY HH:MM:ss')}\n
       *CLIENTE:*
-      *Nome:* ${customer.pushName}
+      *Nome:* ${customer.name}
       *Telefone:* ${contact}\n
       ${this._displayOrder(dataTemp).toUpperCase()}\n
       *Número do pedido:* ${dataTemp.createAt}`.replace(/^ +/gm, '');
@@ -79,7 +97,13 @@ export class ChatManagement {
          const jid = this._createJid(number);
          await this._seeTyping(sock, { remoteJid: jid });
 
-         sock.sendMessage(jid, { text: redirectMessage });
+         sock
+            .sendMessage(jid, { text: redirectMessage })
+            .then((result) => {
+               sock.sendPresenceUpdate('paused', jid);
+               console.log('Succsses - f _redirectOrder: ', result);
+            })
+            .catch((err) => console.log('Error - f _redirectOrder: ', err));
       });
    }
 
@@ -189,19 +213,44 @@ export class ChatManagement {
             this.brokerService.brokerController.insertDocWithId(jid, {
                createAt: Date.now(),
                customerId,
+               [FieldName.codeStage]: 'startService',
             }),
          );
 
       sock
          .sendMessage(jid, {
-            text: `Olá *${received.pushName}*! Bem vindo ao *${this.botProfile.companyName}*😁!
+            text: `Oi! Bem vindo ao *${this.botProfile.companyName}*!
             Eu sou o *${this.botProfile.botName}* 🤖, e estou aqui para auxiliar no seu atendimento.
-            Como eu posso te ajudar?`.replace(/^ +/gm, ''),
+            Qual o seu *nome*?😁`.replace(/^ +/gm, ''),
+         })
+         .then((result) => {
+            sock.sendPresenceUpdate('paused', jid);
+            console.log('Succsses - f initialChat: ', result);
+         })
+         .catch((err) => console.log('Error - f initialChat: ', err));
+   };
+
+   public readonly startService = async (received: proto.IWebMessageInfo, sock: WASocket) => {
+      await this._seeTyping(sock, received.key);
+
+      const jid = received.key.remoteJid;
+
+      sock
+         .sendMessage(jid, {
+            text: `Ótimo *${this._checkReceivedText(
+               received,
+            )}*, então vmos iniciar o seu atendimento!
+            Como eu posso te ajudar?😁`.replace(/^ +/gm, ''),
             footer: this.botProfile.shortName,
             templateButtons: this._createButtons(this.chatActions.buttonsListInit),
          })
          .then((result) => {
             sock.sendPresenceUpdate('paused', jid);
+            this.brokerService.customerController.updateDocument({
+               idDoc: jid,
+               field: 'name',
+               data: this._checkReceivedText(received),
+            });
             console.log('Succsses - f initialChat: ', result);
          })
          .catch((err) => console.log('Error - f initialChat: ', err));
@@ -274,6 +323,7 @@ export class ChatManagement {
          })
          .then((result) => {
             sock.sendPresenceUpdate('paused', jid);
+            this.brokerService.brokerController.insertDocWithId(jid, { createAt: Date.now() });
             console.log('Succsses - f callBot: ', result);
          })
          .catch((err) => console.log('Error - f callBot image: ', err));
@@ -381,6 +431,7 @@ export class ChatManagement {
       this.orderManagement.seeTyping = this._seeTyping;
       this.orderManagement.createButtons = this._createButtons;
       this.orderManagement.displayOrder = this._displayOrder;
+      this.orderManagement.checkReceivedText = this._checkReceivedText;
 
       const management = this.orderManagement[this._command];
 
@@ -448,6 +499,7 @@ export class ChatManagement {
       this.addressmanagement.chatActions = this.chatActions;
       this.addressmanagement.createButtons = this._createButtons;
       this.addressmanagement.botProfile = this.botProfile;
+      this.addressmanagement.checkReceivedText = this._checkReceivedText;
 
       this._command = documentData[FieldName.subStage] as OrderCommandsKeys | AddressCommandsKeys;
 
@@ -491,23 +543,21 @@ export class ChatManagement {
          waid: jid,
       });
 
-      const customerData = customerReferences!.data() as TCustomer;
+      const customerData = customerReferences!.data() as CustomerDTO;
 
       orderData.finishedAt = Date.now();
 
-      const orderEnd: OrderDTO = {
+      const { orderId } = this.brokerService.orderController.insertDocument({
          customerId: orderData.customerId,
          productList: orderData.tempOrderList,
          status: 'producing',
          metadata: {
-            createAt: orderData.createAt,
+            createAt: orderData.createAt as number,
             finishedAt: orderData.finishedAt,
          },
-      };
+      });
 
-      const { orderId } = this.brokerService.orderController.insertDocument(orderEnd);
-
-      this.redirectOrder({ sock, customer: customerData, dataTemp: orderData });
+      this._redirectOrder({ sock, customer: customerData, dataTemp: orderData });
 
       console.log({ orderId });
 
@@ -538,7 +588,7 @@ export class ChatManagement {
          productList: documentData.tempOrderList,
          status: 'canceled',
          metadata: {
-            createAt: documentData.createAt,
+            createAt: documentData.createAt as number,
             finishedAt: documentData.finishedAt,
          },
       });
