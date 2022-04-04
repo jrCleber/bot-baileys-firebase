@@ -1,0 +1,33 @@
+{
+    "buttonsListInit": [
+        { "displayText": "Fazer um pedido", "id": "id1" },
+        { "displayText": "Ver o cardápio", "id": "id2" },
+        { "displayText": "Outras opções", "id": "id3" }
+    ],
+    "buttonsViewMenu": [
+        { "displayText": "Fazer um pedido", "id": "id4" },
+        { "displayText": "Voltar", "id": "id5" }
+    ],
+    "buttonsOtherOptions": [
+        { "displayText": "Fazer uma recalmação", "id": "id6" },
+        { "displayText": "Falar com um atendente", "id": "id7" },
+        { "displayText": "Alterar cadastro", "id": "id8" }
+    ],
+    "buttonCancell": [
+        { "displayText": "Cancelar o pedido", "id": "id9" }
+    ],
+    "buttonsAddItemOrder": [
+        { "displayText": "Adicionar item", "id": "id10" },
+        { "displayText": "Não adicionar", "id": "id11" }
+    ],
+    "buttonsOrder": [
+        { "displayText": "Pedido ok", "id": "id12" },
+        { "displayText": "Editar o pedido", "id": "id13" },
+        { "displayText": "Cancelar", "id": "id14" }
+    ],
+    "buttosnOrderEnd": [
+        { "displayText": "Enviar o pedido", "id": "id15" },
+        { "displayText": "Editar o pedido", "id": "id16" },
+        { "displayText": "Cancelar", "id": "id17" }
+    ]
+}
