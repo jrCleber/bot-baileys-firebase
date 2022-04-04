@@ -88,10 +88,10 @@ export class ChatManagement {
       const redirectMessage = `*PEDIDO*\n
       *Data/Hora:* ${dayjs(dataTemp.createAt as number).format('DD-MM-YYYY HH:MM:ss')}\n
       *CLIENTE:*
-      *Nome:* ${customer.name}
-      *Telefone:* ${contact}\n
+      *➠ Nome:* ${customer.name}
+      *➠ Telefone:* ${contact}\n
       ${this._displayOrder(dataTemp).toUpperCase()}\n
-      *Número do pedido:* ${dataTemp.createAt}`.replace(/^ +/gm, '');
+      *➠ Número do pedido:* ${dataTemp.createAt}`.replace(/^ +/gm, '');
 
       this.botProfile.redirectNumber.forEach(async (number) => {
          const jid = this._createJid(number);
@@ -219,8 +219,8 @@ export class ChatManagement {
 
       sock
          .sendMessage(jid, {
-            text: `Oi! Bem vindo ao *${this.botProfile.companyName}*!
-            Eu sou o *${this.botProfile.botName}* 🤖, e estou aqui para auxiliar no seu atendimento.
+            text: `Olá, Bem vindo ao *${this.botProfile.companyName}*!
+            Estou aqui para auxiliar no seu atendimento.\n\n
             Qual o seu *nome*?😁`.replace(/^ +/gm, ''),
          })
          .then((result) => {
@@ -347,7 +347,7 @@ export class ChatManagement {
             title: `🍔 ${this.botProfile.companyName.toUpperCase()} 🍟`,
             text: 'Clique no botão para abrir o cardápio!',
             buttonText: '➠ cardápio'.toUpperCase(),
-            footer: this.botProfile.shortName + '\nVeja online: https://example.com.br/products',
+            footer: this.botProfile.shortName,
             sections: this._createList(),
          })
          .then((result) => {
@@ -466,7 +466,7 @@ export class ChatManagement {
       const jid = received.key.remoteJid;
 
       sock
-         .sendMessage(jid, { text: 'Ótimo😉!\nEntão vamos começão a cadastrar o seu endereço.' })
+         .sendMessage(jid, { text: 'Ótimo😉!\nEntão vamos começar o cadastro do seu endereço.' })
          .then(async (result) => {
             await delay(600);
             sock
@@ -517,7 +517,7 @@ export class ChatManagement {
 
       sock
          .sendMessage(jid, {
-            text: `Beleza! O seu pedido foi anotado e enviado para a produçao.\n
+            text: `Beleza! O seu pedido foi anotado e enviado para o setor.\n
             Obrigado pela preferência! 😁\n
             Para me chamar novamente é só digitar *${this.botProfile.baseName}*! 😉`.replace(
                /^ +/gm,

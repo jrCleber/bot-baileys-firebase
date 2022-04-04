@@ -5,9 +5,9 @@
    "order": {
        "openOrder": ["fazer um pedido","iniciar o pedido","começar o pedido","abrir o pedido","inicializar o pedido","fazer pedido"],
        "addOrder": ["adicionar ao pedido","adicionar item","acrescentar ao pedido","add item"],
-       "accordingOrder": ["pedido ok","tudo certo","pedido certo","tudo ok","ok","certinho","prosseguir"]
+       "accordingOrder": ["pedido ok","tudo certo","pedido certo","tudo ok","ok","certinho","prosseguir","confirmar pedido"]
    },
    "notAdd": ["não adicionar", "nao adicionar", "n adicionar"],
    "otherOptions": ["outras opções","outras opcoes","mais opções","mais opcoes"],
-   "callBot": ["bot","burgão","burgao", "burgerbot"]
+   "callBot": ["bot","julia","oi", "boa tarde","boa noite","bom dia","olá","pedido"]
 }

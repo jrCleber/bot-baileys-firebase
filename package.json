@@ -12,7 +12,7 @@
   },
   "scripts": {
     "build": "tsc && ts-node --files --transpile-only ./build.ts",
-    "dev": "clear && ts-node --files --transpile-only ./modules/initializer.bot.ts",
+    "dev": "ts-node --files --transpile-only ./modules/initializer.bot.ts",
     "start:app": "tsc && node ./dist/modules/initializer.bot.js",
     "start:prod": "node ./modules/initializer.bot.js",
     "test": "clear && ts-node --files --transpile-only ./tests/all.test.ts"
