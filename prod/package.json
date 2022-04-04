@@ -1,1 +1,0 @@
-{"name":"bot-baileys-firebase","version":"1.0.0","main":"initializer.ts","script":{"start":"node ./modules/initializer.bot.js"},"dependencies":{"@adiwajshing/baileys":"^4.0.1","axios":"^0.26.0","boom":"^7.3.0","dayjs":"^1.10.8","firebase-admin":"^10.0.2","pino":"^7.8.0","qrcode-terminal":"^0.12.0","uuid":"^8.3.2"}}
