@@ -6,6 +6,8 @@ export enum FieldName {
    subStage = 'subStage',
    tempOrderList = 'tempOrderList',
    tempAddress = 'tempAddress',
+   createAt = 'createAt',
+   finishedAt = 'finishedAt',
 }
 
 export enum CollectionsName {

@@ -342,6 +342,8 @@ export class ChatManagement {
          this.brokerService.brokerController.updateDoc(jid, FieldName.codeStage, 'openOrder');
       }
 
+      this.brokerService.brokerController.updateDoc(jid, FieldName.createAt, Date.now());
+
       sock
          .sendMessage(jid, {
             title: `🍔 ${this.botProfile.companyName.toUpperCase()} 🍟`,
