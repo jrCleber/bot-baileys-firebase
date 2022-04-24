@@ -19,4 +19,4 @@ yarn-error.log
 .vercel
 
 # Project related
-token/serviceAccountKey.json
+/firebase/token/serviceAccountKey.json
