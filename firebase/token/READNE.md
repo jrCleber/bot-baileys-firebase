@@ -1,3 +1,8 @@
+## serviceAccountKey.json
+
+Example of firebase admin certification file
+
+```json
 {
   "type": "",
   "project_id": "",
@@ -10,3 +15,4 @@
   "auth_provider_x509_cert_url": "",
   "client_x509_cert_url": ""
 }
+```

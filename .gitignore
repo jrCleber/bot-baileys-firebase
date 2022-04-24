@@ -17,3 +17,6 @@ yarn-error.log
 
 # deployments
 .vercel
+
+# Project related
+token/serviceAccountKey.json
