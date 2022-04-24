@@ -13,14 +13,14 @@
        {"displayText": "Alterar cadastro", "id": "id8"}
    ],
    "buttonCancell": [
-       {"displayText": "Cancelar o pedido", "id": "id9"}
+       {"displayText": "Cancelar", "id": "id9"}
    ],
    "buttonsAddItemOrder": [
        {"displayText": "Adicionar item", "id": "id10"},
        {"displayText": "Não adicionar", "id": "id11"}
    ],
    "buttonsOrder": [
-       {"displayText": "Confirmar Pedido", "id": "id12"},
+       {"displayText": "Pedido ok", "id": "id12"},
        {"displayText": "Editar o pedido", "id": "id13"},
        {"displayText": "Cancelar", "id": "id14"}
    ],

@@ -5,7 +5,7 @@
    "order": {
        "openOrder": ["fazer um pedido","iniciar o pedido","começar o pedido","abrir o pedido","inicializar o pedido","fazer pedido", "pedido"],
        "addOrder": ["adicionar ao pedido","adicionar item","acrescentar ao pedido","add item"],
-       "accordingOrder": ["pedido ok","tudo certo","pedido certo","tudo ok","ok","certinho","prosseguir"]
+       "accordingOrder": ["pedido ok","confirmar o pedido","tudo certo","pedido certo","tudo ok","ok","certinho","prosseguir"]
    },
    "notAdd": ["não adicionar", "nao adicionar", "n adicionar"],
    "otherOptions": ["outras opções","outras opcoes","mais opções","mais opcoes"],
