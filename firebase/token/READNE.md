@@ -1,6 +1,6 @@
 ## serviceAccountKey.json
 
-Example of firebase admin certification file
+Example Firebase admin certification file, which should be saved in this directory.
 
 ```json
 {
