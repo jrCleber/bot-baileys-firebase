@@ -9,6 +9,19 @@ import botProfile from '../../json.config/bot.profile.json';
 import chatOptions from '../../json.config/chat.options.json';
 import chatActions from '../../json.config/chat.actions.json';
 import productList from '../../data/products.json';
+import { PrismaClient } from '@prisma/client';
+
+//
+const prismaClient = new PrismaClient();
+
+prismaClient.customer
+   .findFirst({
+      where: { status: 'ACTIVE' },
+      select: { pushName: true, profilePictureUrl: true },
+   })
+   .then((customer) => {
+      console.log('CUSTOMER-FIND: ', customer);
+   });
 
 // instantiating commands and injecting dependency
 const defaultCommands = new DefaultCommands(chatOptions);
@@ -28,6 +41,7 @@ const chatManagement = new ChatManagement(
    chatActions,
    productList,
    FieldValue,
+   prismaClient,
 );
 
 // instantiating bot startup service and injecting the dependencies

@@ -15,9 +15,9 @@ import { OrderManagement } from './order.management';
 import { opendirSync } from 'fs';
 import { FieldName } from '../../../utils/enum';
 import { OrderCommands } from '../commands/commands';
-import { OrderDTO } from '../../order/dto/order.dto';
 import dayjs from 'dayjs';
 import { CustomerDTO } from '../../customer/dto/customer.dto';
+import { PrismaClient } from '@prisma/client';
 
 type TRedrect = {
    sock: WASocket;
@@ -35,6 +35,7 @@ export class ChatManagement {
       private readonly chatActions: typeof import('../../../json.config/chat.actions.json'),
       private readonly productList: TProduct[],
       private readonly fieldValue: typeof import('firebase-admin').firestore.FieldValue,
+      private readonly prismaClient: PrismaClient,
    ) {
       //
    }
@@ -70,6 +71,7 @@ export class ChatManagement {
       const regexp = new RegExp(/^(\d{2})(\d{2})\d{1}(\d{8})$/);
       if (regexp.test(jid)) {
          const match = regexp.exec(jid);
+         console.log('MATCH: ', match);
          if (match && match[1] === '55' && Number.isInteger(Number.parseInt(match[2]))) {
             const ddd = Number.parseInt(match[2]);
             if (ddd < 31) {
@@ -216,6 +218,18 @@ export class ChatManagement {
                [FieldName.codeStage]: 'startService',
             }),
          );
+
+      const customer = await this.prismaClient.customer.create({
+         data: {
+            pushName: received.pushName,
+            name: '',
+            profilePictureUrl,
+            wuid: jid,
+            status: 'ACTIVE',
+         },
+      });
+
+      console.log({ customer });
 
       sock
          .sendMessage(jid, {
